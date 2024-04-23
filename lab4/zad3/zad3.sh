@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Pobierz listę punktów montowania dla woluminów Docker
-docker_volumes=$(docker volume ls --format '{{.Mountpoint}}')
+volumes=$(docker volume ls --format '{{.Name}}')
 
-# Wyświetl zużycie przestrzeni dyskowej dla każdego woluminu w procentach
-echo "Zużycie przestrzeni dyskowej woluminów Docker:"
-for volume in $docker_volumes; do
-    usage=$(df /mnt/wsl/docker-desktop-data/data/docker/volumes/$volume)
-    echo "Wolumin: $volume - Zużycie: $usage"
+for volume in $volumes
+do
+    usage=`docker run --rm -v $volume:/data alpine sh -c "df -h /data" | tail -1 | tr -s ' ' | cut -d ' ' -f 5`
+    echo "Zużycie przestrzeni dyskowej dla $volume to $usage"
 done
