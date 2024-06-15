@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  redis:
+    image: redis
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=123
+  nginx:
+    depends_on:
+      - api
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+  api:
+    restart: always
+    depends_on:
+      - redis
+      - postgres
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    

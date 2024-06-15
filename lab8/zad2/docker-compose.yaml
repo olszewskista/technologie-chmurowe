@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  redis:
+    image: redis
+  api:
+    depends_on:
+      - redis
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    
